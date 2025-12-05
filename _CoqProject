@@ -1,0 +1,9 @@
+-R ./theories minilola
+
+./theories/lang.v
+./theories/opt.v
+./theories/sem.v
+./theories/typ.v
+./theories/typ_soundness.v
+./theories/typ_ext.v
+./theories/typ_ext_soundness.v
