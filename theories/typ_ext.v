@@ -56,7 +56,7 @@ Inductive ExprTypeSyn (G : TypeEnv) (x : OUT) : Expr -> Pacing -> Prop :=
 
 (**
   Typing rules for equations,
-  extended with a [Reorder] rule for reoredering equations.
+  extended with a [Reorder] rule for reordering equations.
 *)
 Inductive SpecTypeSyn : TypeEnv -> Spec -> Prop :=
   | Empty (G : TypeEnv) :
