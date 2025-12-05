@@ -1,4 +1,4 @@
-From Coq Require Import RelationClasses Morphisms Program.
+From Coq Require Import RelationClasses Morphisms.
 
 (** * Useful definitions related to option types *)
 
@@ -51,21 +51,3 @@ Proof.
   now apply binop_less_def.
 Qed.
 
-Definition is_some {A} (v : option A) :=
-  v <> None.
-
-Instance is_some_proper {A}:
-  Proper (@less_def A ==> impl) (@is_some A).
-Proof.
-  intros a1 a2 Ha H.
-  now destruct a1, a2.
-Qed.
-
-Lemma is_some_iff_le {A}:
-  forall (v1 : option A) (v2 : A),
-    v1 = Some v2 -> v1 <= Some v2.
-Proof.
-  now intros * ->.
-Qed.
-
-(** ** Partial Maps *)
