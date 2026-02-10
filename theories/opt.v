@@ -1,4 +1,4 @@
-From Coq Require Import RelationClasses Morphisms.
+From Stdlib Require Import RelationClasses Morphisms.
 
 (** * Useful definitions related to option types *)
 

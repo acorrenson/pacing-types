@@ -1,5 +1,5 @@
 From minilola Require Import lang opt.
-From Coq Require Import Sorting.Permutation.
+From Stdlib Require Import Sorting.Permutation.
 
 (** * Formal semantics of stream equations with pacing annotations *)
 

@@ -1,5 +1,5 @@
 From minilola Require Import lang sem opt typ typ_soundness typ_ext.
-From Coq Require Import FunctionalExtensionality Lia Sorting.Permutation.
+From Stdlib Require Import FunctionalExtensionality Lia Sorting.Permutation.
 
 (** * Soundness Proof of the Pacing Type System *)
 

@@ -1,4 +1,4 @@
-From Coq Require Export List.
+From Stdlib Require Export List.
 Export ListNotations.
 
 (** * Formalization of core language to model RTLola programs *)

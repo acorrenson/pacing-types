@@ -1,5 +1,5 @@
 From minilola Require Import lang sem typ opt.
-From Coq Require Import FunctionalExtensionality Sorting.Permutation.
+From Stdlib Require Import FunctionalExtensionality Sorting.Permutation.
 
 (** * Soundness proof of the type system *)
 

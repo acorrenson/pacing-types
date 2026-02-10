@@ -1,5 +1,5 @@
 From minilola Require Import lang sem opt.
-From Coq Require Import List.
+From Stdlib Require Import List.
 Import ListNotations.
 
 (** * Basic type system for checking consistency of pacing annotations *)

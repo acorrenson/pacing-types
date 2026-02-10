@@ -1,5 +1,5 @@
 From minilola Require Import lang sem.
-From Coq Require Import List Sorting.Permutation.
+From Stdlib Require Import List Sorting.Permutation.
 
 (** * Extended type system for checking consistency of pacing annotations *)
 
