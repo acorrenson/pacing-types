@@ -1,0 +1,303 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>minilola.sem</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library minilola.sem</h1>
+
+<div class="code">
+<span class="id" title="keyword">From</span> <span class="id" title="var">minilola</span> <span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="minilola.lang.html#"><span class="id" title="library">lang</span></a> <a class="idref" href="minilola.opt.html#"><span class="id" title="library">opt</span></a>.<br/>
+<span class="id" title="keyword">From</span> <span class="id" title="var">Stdlib</span> <span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">Sorting.Permutation</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a id="lab6"></a><h1 class="section">Formal semantics of stream equations with pacing annotations</h1>
+
+<div class="paragraph"> </div>
+
+<a id="lab7"></a><h2 class="section">Preliminary definitions</h2>
+
+<div class="paragraph"> </div>
+
+ Synchronous stream access 
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a id="sync" class="idref" href="#sync"><span class="id" title="definition">sync</span></a> (<a id="w:1" class="idref" href="#w:1"><span class="id" title="binder">w</span></a> : <a class="idref" href="minilola.lang.html#stream"><span class="id" title="definition">stream</span></a>) (<a id="n:2" class="idref" href="#n:2"><span class="id" title="binder">n</span></a> : <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) : <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#option"><span class="id" title="inductive">option</span></a> <a class="idref" href="minilola.lang.html#value"><span class="id" title="axiom">value</span></a> :=<br/>
+&nbsp;&nbsp;<a class="idref" href="minilola.sem.html#w:1"><span class="id" title="variable">w</span></a> <a class="idref" href="minilola.sem.html#n:2"><span class="id" title="variable">n</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Last defined from time point <span class="inlinecode"><span class="id" title="var">n</span></span> 
+</div>
+<div class="code">
+<span class="id" title="keyword">Fixpoint</span> <a id="last" class="idref" href="#last"><span class="id" title="definition">last</span></a> (<a id="w:3" class="idref" href="#w:3"><span class="id" title="binder">w</span></a> : <a class="idref" href="minilola.lang.html#stream"><span class="id" title="definition">stream</span></a>) (<a id="n:4" class="idref" href="#n:4"><span class="id" title="binder">n</span></a> : <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) : <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#option"><span class="id" title="inductive">option</span></a> <a class="idref" href="minilola.lang.html#value"><span class="id" title="axiom">value</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="minilola.sem.html#w:3"><span class="id" title="variable">w</span></a> <a class="idref" href="minilola.sem.html#n:4"><span class="id" title="variable">n</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">v</span> ⇒ <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">v</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#None"><span class="id" title="constructor">None</span></a> ⇒<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="minilola.sem.html#n:4"><span class="id" title="variable">n</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| 0 ⇒ <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#None"><span class="id" title="constructor">None</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#S"><span class="id" title="constructor">S</span></a> <span class="id" title="var">n</span> ⇒ <a class="idref" href="minilola.sem.html#last:5"><span class="id" title="definition">last</span></a> <a class="idref" href="minilola.sem.html#w:3"><span class="id" title="variable">w</span></a> <a class="idref" href="minilola.sem.html#n:4"><span class="id" title="variable">n</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Last defined value from time point <span class="inlinecode"><span class="id" title="var">n</span></span>, or <span class="inlinecode"><span class="id" title="var">v</span></span> if none 
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a id="hold" class="idref" href="#hold"><span class="id" title="definition">hold</span></a> (<a id="w:7" class="idref" href="#w:7"><span class="id" title="binder">w</span></a> : <a class="idref" href="minilola.lang.html#stream"><span class="id" title="definition">stream</span></a>) <a id="n:8" class="idref" href="#n:8"><span class="id" title="binder">n</span></a> (<a id="v:9" class="idref" href="#v:9"><span class="id" title="binder">v</span></a> : <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#option"><span class="id" title="inductive">option</span></a> <a class="idref" href="minilola.lang.html#value"><span class="id" title="axiom">value</span></a>) : <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#option"><span class="id" title="inductive">option</span></a> <a class="idref" href="minilola.lang.html#value"><span class="id" title="axiom">value</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="minilola.sem.html#last"><span class="id" title="definition">last</span></a> <a class="idref" href="minilola.sem.html#w:7"><span class="id" title="variable">w</span></a> <a class="idref" href="minilola.sem.html#n:8"><span class="id" title="variable">n</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">v'</span> ⇒ <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">v'</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#None"><span class="id" title="constructor">None</span></a> ⇒ <a class="idref" href="minilola.sem.html#v:9"><span class="id" title="variable">v</span></a><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+  Synchronous access to the previous value at time point <span class="inlinecode"><span class="id" title="var">n</span></span>.
+  Fail if there is no value at time <span class="inlinecode"><span class="id" title="var">n</span></span>.
+
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a id="prev" class="idref" href="#prev"><span class="id" title="definition">prev</span></a> (<a id="w:10" class="idref" href="#w:10"><span class="id" title="binder">w</span></a> : <a class="idref" href="minilola.lang.html#stream"><span class="id" title="definition">stream</span></a>) <a id="n:11" class="idref" href="#n:11"><span class="id" title="binder">n</span></a> (<a id="v:12" class="idref" href="#v:12"><span class="id" title="binder">v</span></a> : <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#option"><span class="id" title="inductive">option</span></a> <a class="idref" href="minilola.lang.html#value"><span class="id" title="axiom">value</span></a>) : <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#option"><span class="id" title="inductive">option</span></a> <a class="idref" href="minilola.lang.html#value"><span class="id" title="axiom">value</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="minilola.sem.html#w:10"><span class="id" title="variable">w</span></a> <a class="idref" href="minilola.sem.html#n:11"><span class="id" title="variable">n</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#None"><span class="id" title="constructor">None</span></a> ⇒ <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#None"><span class="id" title="constructor">None</span></a><br/>
+&nbsp;&nbsp;| <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">v'</span> ⇒<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="minilola.sem.html#n:11"><span class="id" title="variable">n</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| 0 ⇒ <a class="idref" href="minilola.sem.html#v:12"><span class="id" title="variable">v</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#S"><span class="id" title="constructor">S</span></a> <span class="id" title="var">n</span> ⇒<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="minilola.sem.html#last"><span class="id" title="definition">last</span></a> <a class="idref" href="minilola.sem.html#w:10"><span class="id" title="variable">w</span></a> <a class="idref" href="minilola.sem.html#n:11"><span class="id" title="variable">n</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">v'</span> ⇒ <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">v'</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#None"><span class="id" title="constructor">None</span></a> ⇒ <a class="idref" href="minilola.sem.html#v:12"><span class="id" title="variable">v</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a id="lab8"></a><h2 class="section">Semantics of annotations</h2>
+
+<div class="paragraph"> </div>
+
+ Semantics of pacing annotations 
+</div>
+<div class="code">
+<span class="id" title="keyword">Fixpoint</span> <a id="PacingSem" class="idref" href="#PacingSem"><span class="id" title="definition">PacingSem</span></a> (<a id="r:14" class="idref" href="#r:14"><span class="id" title="binder">r</span></a> : <a class="idref" href="minilola.lang.html#InMap"><span class="id" title="definition">InMap</span></a>) (<a id="t:15" class="idref" href="#t:15"><span class="id" title="binder">t</span></a> : <a class="idref" href="minilola.lang.html#Pacing"><span class="id" title="inductive">Pacing</span></a>) (<a id="n:16" class="idref" href="#n:16"><span class="id" title="binder">n</span></a> : <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="minilola.sem.html#t:15"><span class="id" title="variable">t</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="minilola.lang.html#PTop"><span class="id" title="constructor">PTop</span></a> ⇒ <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#True"><span class="id" title="inductive">True</span></a><br/>
+&nbsp;&nbsp;| <a class="idref" href="minilola.lang.html#PVar"><span class="id" title="constructor">PVar</span></a> <span class="id" title="var">x</span> ⇒ <a class="idref" href="minilola.sem.html#r:14"><span class="id" title="variable">r</span></a> <span class="id" title="var">x</span> <a class="idref" href="minilola.sem.html#n:16"><span class="id" title="variable">n</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#::type_scope:x_'&lt;&gt;'_x"><span class="id" title="notation">≠</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#None"><span class="id" title="constructor">None</span></a><br/>
+&nbsp;&nbsp;| <a class="idref" href="minilola.lang.html#PAnd"><span class="id" title="constructor">PAnd</span></a> <span class="id" title="var">t1</span> <span class="id" title="var">t2</span> ⇒ <a class="idref" href="minilola.sem.html#PacingSem:17"><span class="id" title="definition">PacingSem</span></a> <a class="idref" href="minilola.sem.html#r:14"><span class="id" title="variable">r</span></a> <span class="id" title="var">t1</span> <a class="idref" href="minilola.sem.html#n:16"><span class="id" title="variable">n</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">∧</span></a> <a class="idref" href="minilola.sem.html#PacingSem:17"><span class="id" title="definition">PacingSem</span></a> <a class="idref" href="minilola.sem.html#r:14"><span class="id" title="variable">r</span></a> <span class="id" title="var">t2</span> <a class="idref" href="minilola.sem.html#n:16"><span class="id" title="variable">n</span></a><br/>
+&nbsp;&nbsp;| <a class="idref" href="minilola.lang.html#POr"><span class="id" title="constructor">POr</span></a> <span class="id" title="var">t1</span> <span class="id" title="var">t2</span> ⇒ <a class="idref" href="minilola.sem.html#PacingSem:17"><span class="id" title="definition">PacingSem</span></a> <a class="idref" href="minilola.sem.html#r:14"><span class="id" title="variable">r</span></a> <span class="id" title="var">t1</span> <a class="idref" href="minilola.sem.html#n:16"><span class="id" title="variable">n</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#f031fe1957c4a4a8e217aa46af2b4e25"><span class="id" title="notation">∨</span></a> <a class="idref" href="minilola.sem.html#PacingSem:17"><span class="id" title="definition">PacingSem</span></a> <a class="idref" href="minilola.sem.html#r:14"><span class="id" title="variable">r</span></a> <span class="id" title="var">t2</span> <a class="idref" href="minilola.sem.html#n:16"><span class="id" title="variable">n</span></a><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <a id="PacingSemBool" class="idref" href="#PacingSemBool"><span class="id" title="definition">PacingSemBool</span></a> (<a id="r:19" class="idref" href="#r:19"><span class="id" title="binder">r</span></a> : <a class="idref" href="minilola.lang.html#InMap"><span class="id" title="definition">InMap</span></a>) (<a id="t:20" class="idref" href="#t:20"><span class="id" title="binder">t</span></a> : <a class="idref" href="minilola.lang.html#Pacing"><span class="id" title="inductive">Pacing</span></a>) (<a id="n:21" class="idref" href="#n:21"><span class="id" title="binder">n</span></a> : <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="minilola.sem.html#t:20"><span class="id" title="variable">t</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="minilola.lang.html#PTop"><span class="id" title="constructor">PTop</span></a> ⇒ <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><br/>
+&nbsp;&nbsp;| <a class="idref" href="minilola.lang.html#PVar"><span class="id" title="constructor">PVar</span></a> <span class="id" title="var">x</span> ⇒<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="minilola.sem.html#r:19"><span class="id" title="variable">r</span></a> <span class="id" title="var">x</span> <a class="idref" href="minilola.sem.html#n:21"><span class="id" title="variable">n</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#None"><span class="id" title="constructor">None</span></a> ⇒ <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#false"><span class="id" title="constructor">false</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">_</span> ⇒ <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">end</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="minilola.lang.html#PAnd"><span class="id" title="constructor">PAnd</span></a> <span class="id" title="var">t1</span> <span class="id" title="var">t2</span> ⇒ (<a class="idref" href="minilola.sem.html#PacingSemBool:22"><span class="id" title="definition">PacingSemBool</span></a> <a class="idref" href="minilola.sem.html#r:19"><span class="id" title="variable">r</span></a> <span class="id" title="var">t1</span> <a class="idref" href="minilola.sem.html#n:21"><span class="id" title="variable">n</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#::bool_scope:x_'&amp;&amp;'_x"><span class="id" title="notation">&amp;&amp;</span></a> <a class="idref" href="minilola.sem.html#PacingSemBool:22"><span class="id" title="definition">PacingSemBool</span></a> <a class="idref" href="minilola.sem.html#r:19"><span class="id" title="variable">r</span></a> <span class="id" title="var">t2</span> <a class="idref" href="minilola.sem.html#n:21"><span class="id" title="variable">n</span></a>)%<span class="id" title="var">bool</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="minilola.lang.html#POr"><span class="id" title="constructor">POr</span></a> <span class="id" title="var">t1</span> <span class="id" title="var">t2</span> ⇒ (<a class="idref" href="minilola.sem.html#PacingSemBool:22"><span class="id" title="definition">PacingSemBool</span></a> <a class="idref" href="minilola.sem.html#r:19"><span class="id" title="variable">r</span></a> <span class="id" title="var">t1</span> <a class="idref" href="minilola.sem.html#n:21"><span class="id" title="variable">n</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#081ff67d3116402bb680e8692aa39185"><span class="id" title="notation">||</span></a> <a class="idref" href="minilola.sem.html#PacingSemBool:22"><span class="id" title="definition">PacingSemBool</span></a> <a class="idref" href="minilola.sem.html#r:19"><span class="id" title="variable">r</span></a> <span class="id" title="var">t2</span> <a class="idref" href="minilola.sem.html#n:21"><span class="id" title="variable">n</span></a>)%<span class="id" title="var">bool</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <a id="PacingSemBool_true_iff" class="idref" href="#PacingSemBool_true_iff"><span class="id" title="lemma">PacingSemBool_true_iff</span></a>:<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">∀</span> <a id="r:24" class="idref" href="#r:24"><span class="id" title="binder">r</span></a> <a id="t:25" class="idref" href="#t:25"><span class="id" title="binder">t</span></a> <a id="n:26" class="idref" href="#n:26"><span class="id" title="binder">n</span></a>, <a class="idref" href="minilola.sem.html#PacingSemBool"><span class="id" title="definition">PacingSemBool</span></a> <a class="idref" href="minilola.sem.html#r:24"><span class="id" title="variable">r</span></a> <a class="idref" href="minilola.sem.html#t:25"><span class="id" title="variable">t</span></a> <a class="idref" href="minilola.sem.html#n:26"><span class="id" title="variable">n</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#6cd0f7b28b6092304087c7049437bb1a"><span class="id" title="notation">=</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#true"><span class="id" title="constructor">true</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#::type_scope:x_'&lt;-&gt;'_x"><span class="id" title="notation">↔</span></a> <a class="idref" href="minilola.sem.html#PacingSem"><span class="id" title="definition">PacingSem</span></a> <a class="idref" href="minilola.sem.html#r:24"><span class="id" title="variable">r</span></a> <a class="idref" href="minilola.sem.html#t:25"><span class="id" title="variable">t</span></a> <a class="idref" href="minilola.sem.html#n:26"><span class="id" title="variable">n</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">t</span>; <span class="id" title="tactic">intros</span> <span class="id" title="var">n</span>; <span class="id" title="tactic">simpl</span>; <span class="id" title="tactic">split</span>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="var">now</span> <span class="id" title="tactic">destruct</span> (<span class="id" title="var">r</span> <span class="id" title="var">x</span> <span class="id" title="var">n</span>).<br/>
+&nbsp;&nbsp;- <span class="id" title="var">now</span> <span class="id" title="tactic">destruct</span> (<span class="id" title="var">r</span> <span class="id" title="var">x</span> <span class="id" title="var">n</span>).<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> [<span class="id" title="var">H1</span> <span class="id" title="var">H2</span>]%<span class="id" title="lemma">Bool.andb_true_iff</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">firstorder</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> [<span class="id" title="var">H1</span> <span class="id" title="var">H2</span>].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="lemma">Bool.andb_true_iff</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">firstorder</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> [<span class="id" title="var">H1</span> | <span class="id" title="var">H1</span>]%<span class="id" title="lemma">Bool.orb_true_iff</span>; <span class="id" title="tactic">firstorder</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> [<span class="id" title="var">H1</span> | <span class="id" title="var">H1</span>]; <span class="id" title="tactic">apply</span> <span class="id" title="lemma">Bool.orb_true_iff</span>; <span class="id" title="tactic">firstorder</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+  Pacing Entailement.
+  Define what it means for a pacing annotation
+  to describe "less time points" than another one.
+
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a id="PacingEnt" class="idref" href="#PacingEnt"><span class="id" title="definition">PacingEnt</span></a> (<a id="tmust:27" class="idref" href="#tmust:27"><span class="id" title="binder">tmust</span></a> : <a class="idref" href="minilola.lang.html#Pacing"><span class="id" title="inductive">Pacing</span></a>) (<a id="tcan:28" class="idref" href="#tcan:28"><span class="id" title="binder">tcan</span></a> : <a class="idref" href="minilola.lang.html#Pacing"><span class="id" title="inductive">Pacing</span></a>) : <span class="id" title="keyword">Prop</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">∀</span> (<a id="rin:29" class="idref" href="#rin:29"><span class="id" title="binder">rin</span></a> : <a class="idref" href="minilola.lang.html#InMap"><span class="id" title="definition">InMap</span></a>) (<a id="n:30" class="idref" href="#n:30"><span class="id" title="binder">n</span></a> : <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>), <a class="idref" href="minilola.sem.html#PacingSem"><span class="id" title="definition">PacingSem</span></a> <a class="idref" href="minilola.sem.html#rin:29"><span class="id" title="variable">rin</span></a> <a class="idref" href="minilola.sem.html#tmust:27"><span class="id" title="variable">tmust</span></a> <a class="idref" href="minilola.sem.html#n:30"><span class="id" title="variable">n</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">→</span></a> <a class="idref" href="minilola.sem.html#PacingSem"><span class="id" title="definition">PacingSem</span></a> <a class="idref" href="minilola.sem.html#rin:29"><span class="id" title="variable">rin</span></a> <a class="idref" href="minilola.sem.html#tcan:28"><span class="id" title="variable">tcan</span></a> <a class="idref" href="minilola.sem.html#n:30"><span class="id" title="variable">n</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a id="lab9"></a><h2 class="section">Semantics of expressions</h2>
+
+<div class="paragraph"> </div>
+
+ Access an input or output stream in a pair of stream maps 
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a id="get" class="idref" href="#get"><span class="id" title="definition">get</span></a> '(<a id="pat:33" class="idref" href="#pat:33"><span class="id" title="binder">(</span></a><a id="rin:32" class="idref" href="#rin:32"><span class="id" title="binder"><span id="pat:33" class="id">rin</span></span></a><a id="pat:33" class="idref" href="#pat:33"><span class="id" title="binder">,</span></a> <a id="rout:31" class="idref" href="#rout:31"><span class="id" title="binder"><span id="pat:33" class="id">rout</span></span></a><a id="pat:33" class="idref" href="#pat:33"><span class="id" title="binder">)</span></a> <a id="pat:33" class="idref" href="#pat:33"><span class="id" title="binder">:</span></a> <a id="pat:33" class="idref" href="#pat:33"><span class="id" title="binder">InMap</span></a> <a id="pat:33" class="idref" href="#pat:33"><span class="id" title="binder">×</span></a> <a id="pat:33" class="idref" href="#pat:33"><span class="id" title="binder">OutMap</span></a>) (<a id="v:34" class="idref" href="#v:34"><span class="id" title="binder">v</span></a> : <a class="idref" href="minilola.lang.html#Var"><span class="id" title="inductive">Var</span></a>) :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="minilola.sem.html#v:34"><span class="id" title="variable">v</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="minilola.lang.html#Varin"><span class="id" title="constructor">Varin</span></a> <span class="id" title="var">x</span> ⇒ <a class="idref" href="minilola.sem.html#rin:32"><span class="id" title="variable">rin</span></a> <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="minilola.lang.html#Varout"><span class="id" title="constructor">Varout</span></a> <span class="id" title="var">x</span> ⇒ <a class="idref" href="minilola.sem.html#rout:31"><span class="id" title="variable">rout</span></a> <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+Stream denoted by a stream expression in a given pair of stream maps 
+</div>
+<div class="code">
+<span class="id" title="keyword">Fixpoint</span> <a id="ExprSem" class="idref" href="#ExprSem"><span class="id" title="definition">ExprSem</span></a> (<a id="e:36" class="idref" href="#e:36"><span class="id" title="binder">e</span></a> : <a class="idref" href="minilola.lang.html#Expr"><span class="id" title="inductive">Expr</span></a>) (<a id="r:37" class="idref" href="#r:37"><span class="id" title="binder">r</span></a> : <a class="idref" href="minilola.lang.html#InMap"><span class="id" title="definition">InMap</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#11c698c8685bb8ab1cf725545c085ac4"><span class="id" title="notation">×</span></a> <a class="idref" href="minilola.lang.html#OutMap"><span class="id" title="definition">OutMap</span></a>) (<a id="n:38" class="idref" href="#n:38"><span class="id" title="binder">n</span></a> : <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) : <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#option"><span class="id" title="inductive">option</span></a> <a class="idref" href="minilola.lang.html#value"><span class="id" title="axiom">value</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <a class="idref" href="minilola.sem.html#e:36"><span class="id" title="variable">e</span></a> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="minilola.lang.html#EVar"><span class="id" title="constructor">EVar</span></a> <span class="id" title="var">x</span> ⇒ <a class="idref" href="minilola.sem.html#sync"><span class="id" title="definition">sync</span></a> (<a class="idref" href="minilola.sem.html#get"><span class="id" title="definition">get</span></a> <a class="idref" href="minilola.sem.html#r:37"><span class="id" title="variable">r</span></a> <span class="id" title="var">x</span>) <a class="idref" href="minilola.sem.html#n:38"><span class="id" title="variable">n</span></a><br/>
+&nbsp;&nbsp;| <a class="idref" href="minilola.lang.html#EVal"><span class="id" title="constructor">EVal</span></a> <span class="id" title="var">v</span> ⇒ <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#Some"><span class="id" title="constructor">Some</span></a> <span class="id" title="var">v</span><br/>
+&nbsp;&nbsp;| <a class="idref" href="minilola.lang.html#EPrev"><span class="id" title="constructor">EPrev</span></a> <span class="id" title="var">x</span> <span class="id" title="var">e</span> ⇒ <a class="idref" href="minilola.sem.html#prev"><span class="id" title="definition">prev</span></a> (<a class="idref" href="minilola.sem.html#get"><span class="id" title="definition">get</span></a> <a class="idref" href="minilola.sem.html#r:37"><span class="id" title="variable">r</span></a> <span class="id" title="var">x</span>) <a class="idref" href="minilola.sem.html#n:38"><span class="id" title="variable">n</span></a> (<a class="idref" href="minilola.sem.html#ExprSem:39"><span class="id" title="definition">ExprSem</span></a> <a class="idref" href="minilola.sem.html#e:36"><span class="id" title="variable">e</span></a> <a class="idref" href="minilola.sem.html#r:37"><span class="id" title="variable">r</span></a> <a class="idref" href="minilola.sem.html#n:38"><span class="id" title="variable">n</span></a>)<br/>
+&nbsp;&nbsp;| <a class="idref" href="minilola.lang.html#EHold"><span class="id" title="constructor">EHold</span></a> <span class="id" title="var">x</span> <span class="id" title="var">e</span> ⇒ <a class="idref" href="minilola.sem.html#hold"><span class="id" title="definition">hold</span></a> (<a class="idref" href="minilola.sem.html#get"><span class="id" title="definition">get</span></a> <a class="idref" href="minilola.sem.html#r:37"><span class="id" title="variable">r</span></a> <span class="id" title="var">x</span>) <a class="idref" href="minilola.sem.html#n:38"><span class="id" title="variable">n</span></a> (<a class="idref" href="minilola.sem.html#ExprSem:39"><span class="id" title="definition">ExprSem</span></a> <a class="idref" href="minilola.sem.html#e:36"><span class="id" title="variable">e</span></a> <a class="idref" href="minilola.sem.html#r:37"><span class="id" title="variable">r</span></a> <a class="idref" href="minilola.sem.html#n:38"><span class="id" title="variable">n</span></a>)<br/>
+&nbsp;&nbsp;| <a class="idref" href="minilola.lang.html#EBinOp"><span class="id" title="constructor">EBinOp</span></a> <span class="id" title="var">f</span> <span class="id" title="var">e1</span> <span class="id" title="var">e2</span> ⇒ <a class="idref" href="minilola.opt.html#binop"><span class="id" title="definition">binop</span></a> <span class="id" title="var">f</span> (<a class="idref" href="minilola.sem.html#ExprSem:39"><span class="id" title="definition">ExprSem</span></a> <span class="id" title="var">e1</span> <a class="idref" href="minilola.sem.html#r:37"><span class="id" title="variable">r</span></a> <a class="idref" href="minilola.sem.html#n:38"><span class="id" title="variable">n</span></a>) (<a class="idref" href="minilola.sem.html#ExprSem:39"><span class="id" title="definition">ExprSem</span></a> <span class="id" title="var">e2</span> <a class="idref" href="minilola.sem.html#r:37"><span class="id" title="variable">r</span></a> <a class="idref" href="minilola.sem.html#n:38"><span class="id" title="variable">n</span></a>)<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a id="lab10"></a><h2 class="section">Semantics of equations</h2>
+
+<div class="paragraph"> </div>
+
+ What it means for an equation to be satisfied at a given time point <span class="inlinecode"><span class="id" title="var">n</span></span> 
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a id="EqSem_at" class="idref" href="#EqSem_at"><span class="id" title="definition">EqSem_at</span></a> '(<a id="pat:44" class="idref" href="#pat:44"><span class="id" title="binder">(</span></a><a id="x:43" class="idref" href="#x:43"><span class="id" title="binder"><span id="pat:44" class="id">x</span></span></a><a id="pat:44" class="idref" href="#pat:44"><span class="id" title="binder">,</span></a> <a id="t:42" class="idref" href="#t:42"><span class="id" title="binder"><span id="pat:44" class="id">t</span></span></a><a id="pat:44" class="idref" href="#pat:44"><span class="id" title="binder">,</span></a> <a id="e:41" class="idref" href="#e:41"><span class="id" title="binder"><span id="pat:44" class="id">e</span></span></a><a id="pat:44" class="idref" href="#pat:44"><span class="id" title="binder">)</span></a> <a id="pat:44" class="idref" href="#pat:44"><span class="id" title="binder">:</span></a> <a id="pat:44" class="idref" href="#pat:44"><span class="id" title="binder">(</span></a><a id="pat:44" class="idref" href="#pat:44"><span class="id" title="binder">OUT</span></a> <a id="pat:44" class="idref" href="#pat:44"><span class="id" title="binder">×</span></a> <a id="pat:44" class="idref" href="#pat:44"><span class="id" title="binder">Pacing</span></a> <a id="pat:44" class="idref" href="#pat:44"><span class="id" title="binder">×</span></a> <a id="pat:44" class="idref" href="#pat:44"><span class="id" title="binder">Expr</span></a><a id="pat:44" class="idref" href="#pat:44"><span class="id" title="binder">)</span></a>) '(<a id="pat:47" class="idref" href="#pat:47"><span class="id" title="binder">(</span></a><a id="rin:46" class="idref" href="#rin:46"><span class="id" title="binder"><span id="pat:47" class="id">rin</span></span></a><a id="pat:47" class="idref" href="#pat:47"><span class="id" title="binder">,</span></a> <a id="rout:45" class="idref" href="#rout:45"><span class="id" title="binder"><span id="pat:47" class="id">rout</span></span></a><a id="pat:47" class="idref" href="#pat:47"><span class="id" title="binder">)</span></a> <a id="pat:47" class="idref" href="#pat:47"><span class="id" title="binder">:</span></a> <a id="pat:47" class="idref" href="#pat:47"><span class="id" title="binder">InMap</span></a> <a id="pat:47" class="idref" href="#pat:47"><span class="id" title="binder">×</span></a> <a id="pat:47" class="idref" href="#pat:47"><span class="id" title="binder">OutMap</span></a>) (<a id="n:48" class="idref" href="#n:48"><span class="id" title="binder">n</span></a> : <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) :=<br/>
+&nbsp;&nbsp;<a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">(</span></a><a class="idref" href="minilola.sem.html#rout:45"><span class="id" title="variable">rout</span></a> <a class="idref" href="minilola.sem.html#x:43"><span class="id" title="variable">x</span></a> <a class="idref" href="minilola.sem.html#n:48"><span class="id" title="variable">n</span></a> <a class="idref" href="minilola.opt.html#b8382ebd4d1ecdc4b5385bb249fc75b4"><span class="id" title="notation">≤</span></a> <a class="idref" href="minilola.sem.html#ExprSem"><span class="id" title="definition">ExprSem</span></a> <a class="idref" href="minilola.sem.html#e:41"><span class="id" title="variable">e</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#e6756e10c36f149b18b4a8741ed83079"><span class="id" title="notation">(</span></a><a class="idref" href="minilola.sem.html#rin:46"><span class="id" title="variable">rin</span></a><a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#e6756e10c36f149b18b4a8741ed83079"><span class="id" title="notation">,</span></a> <a class="idref" href="minilola.sem.html#rout:45"><span class="id" title="variable">rout</span></a><a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#e6756e10c36f149b18b4a8741ed83079"><span class="id" title="notation">)</span></a> <a class="idref" href="minilola.sem.html#n:48"><span class="id" title="variable">n</span></a><a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">)</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">∧</span></a><br/>
+&nbsp;&nbsp;<a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">(</span></a><a class="idref" href="minilola.sem.html#PacingSem"><span class="id" title="definition">PacingSem</span></a> <a class="idref" href="minilola.sem.html#rin:46"><span class="id" title="variable">rin</span></a> <a class="idref" href="minilola.sem.html#t:42"><span class="id" title="variable">t</span></a> <a class="idref" href="minilola.sem.html#n:48"><span class="id" title="variable">n</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#::type_scope:x_'&lt;-&gt;'_x"><span class="id" title="notation">↔</span></a> <a class="idref" href="minilola.sem.html#rout:45"><span class="id" title="variable">rout</span></a> <a class="idref" href="minilola.sem.html#x:43"><span class="id" title="variable">x</span></a> <a class="idref" href="minilola.sem.html#n:48"><span class="id" title="variable">n</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#::type_scope:x_'&lt;&gt;'_x"><span class="id" title="notation">≠</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#None"><span class="id" title="constructor">None</span></a><a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">)</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+What it means for an equation to be satisfied at all time points 
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a id="EqSem" class="idref" href="#EqSem"><span class="id" title="definition">EqSem</span></a> <a id="equ:49" class="idref" href="#equ:49"><span class="id" title="binder">equ</span></a> <a id="r:50" class="idref" href="#r:50"><span class="id" title="binder">r</span></a> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">∀</span> <a id="n:51" class="idref" href="#n:51"><span class="id" title="binder">n</span></a>, <a class="idref" href="minilola.sem.html#EqSem_at"><span class="id" title="definition">EqSem_at</span></a> <a class="idref" href="minilola.sem.html#equ:49"><span class="id" title="variable">equ</span></a> <a class="idref" href="minilola.sem.html#r:50"><span class="id" title="variable">r</span></a> <a class="idref" href="minilola.sem.html#n:51"><span class="id" title="variable">n</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+What it means for a list of equations to be satisfied 
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a id="Sem" class="idref" href="#Sem"><span class="id" title="definition">Sem</span></a> (<a id="s:52" class="idref" href="#s:52"><span class="id" title="binder">s</span></a> : <a class="idref" href="minilola.lang.html#Spec"><span class="id" title="definition">Spec</span></a>) (<a id="r:53" class="idref" href="#r:53"><span class="id" title="binder">r</span></a> : <a class="idref" href="minilola.lang.html#InMap"><span class="id" title="definition">InMap</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#11c698c8685bb8ab1cf725545c085ac4"><span class="id" title="notation">×</span></a> <a class="idref" href="minilola.lang.html#OutMap"><span class="id" title="definition">OutMap</span></a>) :=<br/>
+&nbsp;&nbsp;<a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Lists.ListDef.html#Forall"><span class="id" title="inductive">Forall</span></a> (<span class="id" title="keyword">fun</span> <a id="e:54" class="idref" href="#e:54"><span class="id" title="binder">e</span></a> ⇒ <a class="idref" href="minilola.sem.html#EqSem"><span class="id" title="definition">EqSem</span></a> <a class="idref" href="minilola.sem.html#e:54"><span class="id" title="variable">e</span></a> <a class="idref" href="minilola.sem.html#r:53"><span class="id" title="variable">r</span></a>) <a class="idref" href="minilola.sem.html#s:52"><span class="id" title="variable">s</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+What it means for a list of equations to be satisfied at a given time point <span class="inlinecode"><span class="id" title="var">n</span></span> 
+</div>
+<div class="code">
+<span class="id" title="keyword">Definition</span> <a id="Sem_at" class="idref" href="#Sem_at"><span class="id" title="definition">Sem_at</span></a> (<a id="s:55" class="idref" href="#s:55"><span class="id" title="binder">s</span></a> : <a class="idref" href="minilola.lang.html#Spec"><span class="id" title="definition">Spec</span></a>) (<a id="r:56" class="idref" href="#r:56"><span class="id" title="binder">r</span></a> : <a class="idref" href="minilola.lang.html#InMap"><span class="id" title="definition">InMap</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#11c698c8685bb8ab1cf725545c085ac4"><span class="id" title="notation">×</span></a> <a class="idref" href="minilola.lang.html#OutMap"><span class="id" title="definition">OutMap</span></a>) (<a id="n:57" class="idref" href="#n:57"><span class="id" title="binder">n</span></a> : <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>) :=<br/>
+&nbsp;&nbsp;<a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Lists.ListDef.html#Forall"><span class="id" title="inductive">Forall</span></a> (<span class="id" title="keyword">fun</span> <a id="e:58" class="idref" href="#e:58"><span class="id" title="binder">e</span></a> ⇒ <a class="idref" href="minilola.sem.html#EqSem_at"><span class="id" title="definition">EqSem_at</span></a> <a class="idref" href="minilola.sem.html#e:58"><span class="id" title="variable">e</span></a> <a class="idref" href="minilola.sem.html#r:56"><span class="id" title="variable">r</span></a> <a class="idref" href="minilola.sem.html#n:57"><span class="id" title="variable">n</span></a>) <a class="idref" href="minilola.sem.html#s:55"><span class="id" title="variable">s</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a id="lab11"></a><h2 class="section">Useful lemmas</h2>
+
+<div class="paragraph"> </div>
+
+ <span class="inlinecode"><a class="idref" href="minilola.sem.html#prev"><span class="id" title="definition">prev</span></a></span> is compatible with the "less-defined" relation 
+</div>
+<div class="code">
+<span class="id" title="keyword">Lemma</span> <a id="prev_less_def" class="idref" href="#prev_less_def"><span class="id" title="lemma">prev_less_def</span></a>:<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">∀</span> <a id="n:59" class="idref" href="#n:59"><span class="id" title="binder">n</span></a> <a id="w:60" class="idref" href="#w:60"><span class="id" title="binder">w</span></a> (<a id="v1:61" class="idref" href="#v1:61"><span class="id" title="binder">v1</span></a> <a id="v2:62" class="idref" href="#v2:62"><span class="id" title="binder">v2</span></a> : <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#option"><span class="id" title="inductive">option</span></a> <a class="idref" href="minilola.lang.html#value"><span class="id" title="axiom">value</span></a>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="minilola.sem.html#v1:61"><span class="id" title="variable">v1</span></a> <a class="idref" href="minilola.opt.html#b8382ebd4d1ecdc4b5385bb249fc75b4"><span class="id" title="notation">≤</span></a> <a class="idref" href="minilola.sem.html#v2:62"><span class="id" title="variable">v2</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">→</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="minilola.sem.html#prev"><span class="id" title="definition">prev</span></a> <a class="idref" href="minilola.sem.html#w:60"><span class="id" title="variable">w</span></a> <a class="idref" href="minilola.sem.html#n:59"><span class="id" title="variable">n</span></a> <a class="idref" href="minilola.sem.html#v1:61"><span class="id" title="variable">v1</span></a> <a class="idref" href="minilola.opt.html#b8382ebd4d1ecdc4b5385bb249fc75b4"><span class="id" title="notation">≤</span></a> <a class="idref" href="minilola.sem.html#prev"><span class="id" title="definition">prev</span></a> <a class="idref" href="minilola.sem.html#w:60"><span class="id" title="variable">w</span></a> <a class="idref" href="minilola.sem.html#n:59"><span class="id" title="variable">n</span></a> <a class="idref" href="minilola.sem.html#v2:62"><span class="id" title="variable">v2</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> × <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="minilola.sem.html#prev"><span class="id" title="definition">prev</span></a>. <span class="id" title="tactic">destruct</span> (<span class="id" title="var">w</span> <span class="id" title="var">n</span>), <span class="id" title="var">n</span>; <span class="id" title="tactic">simpl</span>; <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">now</span> <span class="id" title="tactic">destruct</span> (<a class="idref" href="minilola.sem.html#last"><span class="id" title="definition">last</span></a> <span class="id" title="var">w</span> <span class="id" title="var">n</span>).<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<span class="inlinecode"><a class="idref" href="minilola.sem.html#hold"><span class="id" title="definition">hold</span></a></span> is compatible with the "less-defined" relation 
+</div>
+<div class="code">
+<span class="id" title="keyword">Lemma</span> <a id="hold_less_def" class="idref" href="#hold_less_def"><span class="id" title="lemma">hold_less_def</span></a>:<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">∀</span> <a id="n:63" class="idref" href="#n:63"><span class="id" title="binder">n</span></a> <a id="w:64" class="idref" href="#w:64"><span class="id" title="binder">w</span></a> (<a id="v1:65" class="idref" href="#v1:65"><span class="id" title="binder">v1</span></a> <a id="v2:66" class="idref" href="#v2:66"><span class="id" title="binder">v2</span></a> : <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#option"><span class="id" title="inductive">option</span></a> <a class="idref" href="minilola.lang.html#value"><span class="id" title="axiom">value</span></a>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="minilola.sem.html#v1:65"><span class="id" title="variable">v1</span></a> <a class="idref" href="minilola.opt.html#b8382ebd4d1ecdc4b5385bb249fc75b4"><span class="id" title="notation">≤</span></a> <a class="idref" href="minilola.sem.html#v2:66"><span class="id" title="variable">v2</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">→</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="minilola.sem.html#hold"><span class="id" title="definition">hold</span></a> <a class="idref" href="minilola.sem.html#w:64"><span class="id" title="variable">w</span></a> <a class="idref" href="minilola.sem.html#n:63"><span class="id" title="variable">n</span></a> <a class="idref" href="minilola.sem.html#v1:65"><span class="id" title="variable">v1</span></a> <a class="idref" href="minilola.opt.html#b8382ebd4d1ecdc4b5385bb249fc75b4"><span class="id" title="notation">≤</span></a> <a class="idref" href="minilola.sem.html#hold"><span class="id" title="definition">hold</span></a> <a class="idref" href="minilola.sem.html#w:64"><span class="id" title="variable">w</span></a> <a class="idref" href="minilola.sem.html#n:63"><span class="id" title="variable">n</span></a> <a class="idref" href="minilola.sem.html#v2:66"><span class="id" title="variable">v2</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> × <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">unfold</span> <a class="idref" href="minilola.sem.html#hold"><span class="id" title="definition">hold</span></a>. <span class="id" title="var">now</span> <span class="id" title="tactic">destruct</span> (<a class="idref" href="minilola.sem.html#last"><span class="id" title="definition">last</span></a> <span class="id" title="var">w</span> <span class="id" title="var">n</span>).<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+The semantics of equations is order-insensitive 
+</div>
+<div class="code">
+<span class="id" title="keyword">Lemma</span> <a id="Sem_Permut" class="idref" href="#Sem_Permut"><span class="id" title="lemma">Sem_Permut</span></a>:<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">∀</span> (<a id="s1:67" class="idref" href="#s1:67"><span class="id" title="binder">s1</span></a> <a id="s2:68" class="idref" href="#s2:68"><span class="id" title="binder">s2</span></a> : <a class="idref" href="minilola.lang.html#Spec"><span class="id" title="definition">Spec</span></a>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="inductive">Permutation</span> <a class="idref" href="minilola.sem.html#s1:67"><span class="id" title="variable">s1</span></a> <a class="idref" href="minilola.sem.html#s2:68"><span class="id" title="variable">s2</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">→</span></a><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">∀</span> <a id="rin:69" class="idref" href="#rin:69"><span class="id" title="binder">rin</span></a> <a id="rout:70" class="idref" href="#rout:70"><span class="id" title="binder">rout</span></a>,<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="minilola.sem.html#Sem"><span class="id" title="definition">Sem</span></a> <a class="idref" href="minilola.sem.html#s1:67"><span class="id" title="variable">s1</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#e6756e10c36f149b18b4a8741ed83079"><span class="id" title="notation">(</span></a><a class="idref" href="minilola.sem.html#rin:69"><span class="id" title="variable">rin</span></a><a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#e6756e10c36f149b18b4a8741ed83079"><span class="id" title="notation">,</span></a> <a class="idref" href="minilola.sem.html#rout:70"><span class="id" title="variable">rout</span></a><a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#e6756e10c36f149b18b4a8741ed83079"><span class="id" title="notation">)</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">→</span></a> <a class="idref" href="minilola.sem.html#Sem"><span class="id" title="definition">Sem</span></a> <a class="idref" href="minilola.sem.html#s2:68"><span class="id" title="variable">s2</span></a> <a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#e6756e10c36f149b18b4a8741ed83079"><span class="id" title="notation">(</span></a><a class="idref" href="minilola.sem.html#rin:69"><span class="id" title="variable">rin</span></a><a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#e6756e10c36f149b18b4a8741ed83079"><span class="id" title="notation">,</span></a> <a class="idref" href="minilola.sem.html#rout:70"><span class="id" title="variable">rout</span></a><a class="idref" href="http://rocq-prover.org/doc/V9.0.1/stdlib//Corelib.Init.Datatypes.html#e6756e10c36f149b18b4a8741ed83079"><span class="id" title="notation">)</span></a>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> × <span class="id" title="var">Hperm</span> × <span class="id" title="var">Hsem</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="lemma">Forall_forall</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">x</span> <span class="id" title="var">Hx</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="lemma">Forall_forall</span> <span class="id" title="tactic">in</span> <span class="id" title="var">Hsem</span>; <span class="id" title="tactic">eauto</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="lemma">Permutation_in</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="lemma">Permutation_sym</span>. <span class="id" title="tactic">eauto</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">Hx</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://rocq-prover.org/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>
