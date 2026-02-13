@@ -29,7 +29,7 @@ Instructions on how to install Rocq for you system can be found on the official 
 ## HTML Documentation
 
 To have a closer look at the content of the development, we recommend browsing the precompiled HTML documentation of the Rocq sources.
-To get started, open the file `html/toc.html` in a browser.
+To get started, open the file `doc/toc.html` in a browser.
 
 ## Evaluation Instruction
 
