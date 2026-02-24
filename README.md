@@ -26,6 +26,22 @@ Instructions on how to install Rocq for you system can be found on the official 
   <a href="https://rocq-prover.org/install">https://rocq-prover.org/install</a>
 </div>
 
+Note that the documentation proposes several ways to install Rocq, we recommend installation via the [OPAM package manager](https://rocq-prover.org/docs/using-opam),
+because it enables to precisely choose which version of Rocq is installed.
+
+Instead of installing Rocq on your personal machine, we also provide a Dockerfile for use with [docker](https://www.docker.com).
+To build the artifact using docker, use the following commands at the root of this repostiory:
+
+```
+docker build -t pacing_types
+docker run -it pacing_types
+```
+These two commands should start a shell session with a prompt similar to:
+
+```
+rocq@6643ed072061:~$
+```
+
 ## HTML Documentation
 
 To have a closer look at the content of the development, we recommend browsing the precompiled HTML documentation of the Rocq sources.
@@ -33,7 +49,9 @@ To get started, open the file `doc/toc.html` in a browser.
 
 ## Evaluation Instruction
 
-To check that all claims of the paper are correctly proved in Rocq, you can start by re-compiling all Rocq files using `make`. The output should resemble the following:
+To check that all claims of the paper are correctly proved in Rocq, you can start by re-compiling all Rocq files using `make`
+(either from your own system, or from the docker container).
+The output should resemble the following:
 
 ```
 ROCQ DEP VFILES
